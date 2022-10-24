@@ -5,7 +5,6 @@ const Players = () => {
   const [players, setPlayers] = useState([]);
   const [name, setName] = useState("");
   const [updatedPoints, setUpdatedPoints] = useState(false);
-  const [average, setAverage] = useState(0);
 
   class player {
     constructor(name) {
@@ -13,14 +12,6 @@ const Players = () => {
       this.points = 0;
     }
   }
-
-  const getAverage = () => {
-    let sum = 0;
-    for (let i = 0; i < players.length; i++) {
-      sum += players[i].points;
-    }
-    return sum / players.length;
-  };
 
   const formHandler = (event) => {
     event.preventDefault();
@@ -37,9 +28,6 @@ const Players = () => {
       }
     }
   };
-  useEffect(() => {
-    setAverage(getAverage());
-  }, [average]);
 
   return (
     <div>
@@ -56,12 +44,13 @@ const Players = () => {
         <button type={"submit"}>Add player</button>
       </form>
       <h3>Amount of players: {players.length}</h3>
-      <h3>Average of points: {average}</h3>
+
       {players.map((player, index) => {
         return (
           <div key={index}>
             <h3>{player.name}</h3>
             <h3>{player.points}</h3>
+
             <button
               onClick={(event) => {
                 addPoints(player.name, 1);

@@ -1,10 +1,10 @@
 import Players from "./components/Players";
-import EffectTest from "./components/EffectTest";
+import SocketTest from "./components/SocketTest";
+
 function App() {
   return (
     <div>
-      {/* <Players /> */}
-      <EffectTest />
+      <SocketTest />
     </div>
   );
 }
