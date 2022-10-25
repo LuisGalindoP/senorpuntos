@@ -15,13 +15,25 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  //   console.log(`Usuario ${socket.id} connected`);
+let amountOfUsers = 0;
+let users = [];
+let userPoints = [];
 
-  socket.on("send_1", (data) => {
-    console.log(data.points);
-    let result = Number(data.points) + 1;
-    io.emit("receive_message", result);
+io.on("connection", (socket) => {
+  console.log(`Usuario ${socket.id} connected`);
+
+  socket.on("joinRoom", (data) => {
+    socket.join(data.room);
+    console.log(`User ${data.user} joined ${data.room} room`);
+  });
+
+  socket.on("sendPoints", (data) => {
+    console.log(data);
+    io.to(data.room).emit("receivedAllData", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Usuario ${socket.id} disconnected`);
   });
 });
 
