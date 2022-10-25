@@ -4,31 +4,31 @@ import { useEffect, useState } from "react";
 const socket = io("http://localhost:3001");
 
 const SocketTest = () => {
-  const [message, setMessage] = useState("");
+  const [points, setPoints] = useState("");
   const [messageReceived, setMessageReceived] = useState("");
   //function to send a message to the backend
-  const sendMessage = () => {
-    socket.emit("send_message", { message });
+  const sendPoints = () => {
+    socket.emit("send_1", { points: points });
   };
 
   //this useEffect will listen to changes on the socket variable
   //it will alert when a new message is received
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      alert(data.message);
+      setMessageReceived(data);
     });
   }, [socket]);
 
   return (
     <div>
       <input
-        type="text"
-        placeholder="Message..."
+        type="number"
         onChange={(event) => {
-          setMessage(event.target.value);
+          setPoints(event.target.value);
         }}
       />
-      <button onClick={sendMessage}>Send</button>
+      <button onClick={sendPoints}>Send</button>
+      <h2>{messageReceived}</h2>
     </div>
   );
 };

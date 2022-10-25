@@ -18,9 +18,10 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   //   console.log(`Usuario ${socket.id} connected`);
 
-  socket.on("send_message", (data) => {
-    socket.broadcast.emit("receive_message", data);
-    console.log(data);
+  socket.on("send_1", (data) => {
+    console.log(data.points);
+    let result = Number(data.points) + 1;
+    io.emit("receive_message", result);
   });
 });
 
