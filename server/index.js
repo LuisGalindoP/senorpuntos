@@ -22,11 +22,14 @@ let userPoints = [];
 io.on("connection", (socket) => {
   console.log(`Usuario ${socket.id} connected`);
 
+  //Socket to join a Room
   socket.on("joinRoom", (data) => {
     socket.join(data.room);
     console.log(`User ${data.user} joined ${data.room} room`);
+    io.to(data.room).emit("users", data);
   });
 
+  //Socket to sendPoints and info aboutback to fronEnd
   socket.on("sendPoints", (data) => {
     console.log(data);
     io.to(data.room).emit("receivedAllData", data);
