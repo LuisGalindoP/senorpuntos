@@ -9,6 +9,7 @@ const SocketTest = () => {
   const [userPoints, setUserPoints] = useState(0);
   const [allUsersConnected, setAllUsersConnected] = useState([]);
   const [allData, setAllData] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
   const joinRoom = () => {
     let tempData = {
@@ -18,7 +19,7 @@ const SocketTest = () => {
     if (user === "" || room === "") {
       alert("Name and room are required");
     } else {
-      console.log(tempData);
+      console.log(`Data to joinRoom ${tempData}`);
       socket.emit("joinRoom", tempData);
     }
   };
@@ -32,8 +33,7 @@ const SocketTest = () => {
     await socket.emit("sendPoints", messageData);
   };
 
-  const uno = { name: "luis", puntos: 2 };
-
+  // Main useEffect to receive data from Websocket
   useEffect(() => {
     console.log("useEffect fired");
     socket.on("addUser", (userToAdd) => {
@@ -48,6 +48,11 @@ const SocketTest = () => {
     socket.on("receivedAllData", (data) => {
       console.log(`Received data after submit ${data}`);
       setAllData((allData) => [...allData, data]);
+    });
+    socket.on("users", (data) => {
+      console.log(data.user);
+      setAllUsers(allUsers.push({ user: data.user, points: 0 }));
+      console.log(allUsers);
     });
   }, [socket]);
 
@@ -98,11 +103,13 @@ const SocketTest = () => {
           <button onClick={sendPoints}>Submit</button>
         </div>
       </div>
+      {/* Map for data sent */}
       <div>
         {allData.map((datos, index) => {
           return (
             <div key={index}>
               <h3>
+                {datos.length}
                 {datos.user}
                 {datos.points}
                 {datos.room}
