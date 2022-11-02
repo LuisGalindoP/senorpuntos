@@ -1,3 +1,5 @@
+// IMPORTANT!!!! CHANGE THE MAIN INSIDE PACKAGE.JASON TO INDEX.JS BEFORE RUNNING THIS SERVER
+
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -25,6 +27,8 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (data) => {
     socket.join(data.room);
     console.log(`User ${data.user} joined ${data.room} room`);
+    io.to(data.room).emit("addUser", data.user);
+    console.log(`User to add ${data.user}`);
   });
 
   socket.on("sendPoints", (data) => {

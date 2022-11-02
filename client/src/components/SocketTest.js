@@ -7,6 +7,7 @@ const SocketTest = () => {
   const [user, setUser] = useState("");
   const [room, setRoom] = useState("");
   const [userPoints, setUserPoints] = useState(0);
+  const [allUsersConnected, setAllUsersConnected] = useState([]);
   const [allData, setAllData] = useState([]);
 
   const joinRoom = () => {
@@ -35,7 +36,17 @@ const SocketTest = () => {
 
   useEffect(() => {
     console.log("useEffect fired");
+    socket.on("addUser", (userToAdd) => {
+      console.log(`Received user to add ${userToAdd}`);
+      setAllUsersConnected((allUsersConnected) => [
+        ...allUsersConnected,
+        userToAdd,
+      ]);
+      console.log(allUsersConnected);
+    });
+
     socket.on("receivedAllData", (data) => {
+      console.log(`Received data after submit ${data}`);
       setAllData((allData) => [...allData, data]);
     });
   }, [socket]);
@@ -63,13 +74,28 @@ const SocketTest = () => {
       <div>
         <h3>You are connected to {room} room</h3>
         <div>
-          <input
-            type="number"
-            onChange={(event) => {
-              setUserPoints(event.target.value);
+          <button
+            onClick={(e) => {
+              setUserPoints(1);
             }}
-          />
-          <button onClick={sendPoints}>Send</button>
+          >
+            1
+          </button>
+          <button
+            onClick={(e) => {
+              setUserPoints(3);
+            }}
+          >
+            3
+          </button>
+          <button
+            onClick={(e) => {
+              setUserPoints(5);
+            }}
+          >
+            5
+          </button>
+          <button onClick={sendPoints}>Submit</button>
         </div>
       </div>
       <div>
@@ -81,6 +107,16 @@ const SocketTest = () => {
                 {datos.points}
                 {datos.room}
               </h3>
+            </div>
+          );
+        })}
+      </div>
+      <div>
+        <h2>All users connected</h2>
+        {allUsersConnected.map((user, index) => {
+          return (
+            <div key={index}>
+              <h3>{user}</h3>
             </div>
           );
         })}
