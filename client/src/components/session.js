@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, navigate } from "@reach/router";
 
 const Session = (props) => {
-  const { allSessions } = props;
+  const { allSessions, setAllSessions } = props;
   const { id } = props;
   const [session, setSession] = useState({});
   const { user } = props;
@@ -11,6 +11,7 @@ const Session = (props) => {
   const [userPoints, setUserPoints] = useState(0);
   const [reload, setReload] = useState(false);
 
+  //GET THE SESSION INFORMATION USING THE ID
   useEffect(() => {
     axios
       .get(`http://localhost:8000/session/${id}`)
@@ -36,8 +37,6 @@ const Session = (props) => {
           setUserIdArray(i);
         }
       }
-      // setUserIdArray(9);
-      // console.log("session is active");
     }
   }, [session]);
 
@@ -62,6 +61,7 @@ const Session = (props) => {
       .catch((error) => {
         console.log(error.response.data.errors);
       });
+
     setSession(tempSession);
     setReload(!reload);
   };

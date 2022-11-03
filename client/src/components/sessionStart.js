@@ -9,6 +9,7 @@ const SessionStart = (props) => {
   const [newSessionName, setNewSessionName] = useState("");
   const [joinSessionName, setJoinSessionName] = useState("");
 
+  //GET ALL SESSIONS
   useEffect(() => {
     axios
       .get("http://localhost:8000/sessions")
@@ -21,14 +22,17 @@ const SessionStart = (props) => {
       });
   }, []);
 
+  //FUNCTION TO CREATE A NEW SESSION
   const addNewSession = (event) => {
     event.preventDefault();
-    //CHECK IF SESSIO NAME IS IN USE
+    //Check if session name is in use
     for (let i = 0; i < allSessions.length; i++) {
       if (newSessionName === allSessions[i].sessionName)
         return alert("Session name already in use, select other");
     }
-    //ADD A NEW SESSION AND ADD THE USER WHO CREATED IT
+    //Create a new session
+    //Pass the info including the user information to create the first player
+    //navitage to Session component
     axios
       .post("http://localhost:8000/session/new", {
         sessionName: newSessionName,
@@ -42,15 +46,41 @@ const SessionStart = (props) => {
       .catch((error) => {
         console.log(error);
       });
+    console.log("allSessions from session component", allSessions);
   };
 
+  //FUNCTION TO JOIN A SESSION
   const joinSession = (event) => {
     event.preventDefault();
-    //CHECK IF SESSION EXISTS
+    //Check if session exists
     console.log(allSessions);
     for (let i = 0; i < allSessions.length; i++) {
       console.log(allSessions[i].sessionName);
       if (joinSessionName === allSessions[i].sessionName) {
+        //Copy the players in the session[i]
+        const tempPlayers = allSessions[i].players;
+        //Create a temporal player object to push to the right session
+        let tempPlayer = {
+          name: newUser,
+          points: 0,
+          voted: false,
+        };
+        tempPlayers.push(tempPlayer);
+
+        //Update the righ session
+        axios
+          .put(`http://localhost:8000/session/${allSessions[i]._id}/edit`, {
+            sessionName: allSessions[i].sessionName,
+            players: tempPlayers,
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.response.data.errors);
+          });
+
+        navigate(`/joined/${joinSessionName}/${newUser}`);
         return console.log("welcome to the session", joinSessionName);
       }
     }
