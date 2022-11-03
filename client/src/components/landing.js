@@ -47,9 +47,17 @@ const Landing = () => {
       });
   };
 
+  //JOIN A NEW SESSION
+  //Find session with the name typed and check if exists
+  const joinSession = () => {
+    console.log("joinSession fired");
+  };
+  //if exists send you to the session you selected
+
   return (
     <div>
       <h3>Landing</h3>
+      {/* CREATE A NEW SESSION */}
       <div>
         <h3>Create a new Session</h3>
         <label>Your Name </label>
@@ -68,6 +76,19 @@ const Landing = () => {
           }}
         />
         <button onClick={createNewSession}>Create</button>
+      </div>
+      <hr />
+      {/* JOIN A SESSION */}
+      <div>
+        <h3>Join a session</h3>
+        <label>Session Name</label>
+        <input
+          type="text"
+          onChange={(e) => {
+            setNewSessionName(e.target.value);
+          }}
+        />
+        <button onClick={joinSession}>Join</button>
       </div>
     </div>
   );
